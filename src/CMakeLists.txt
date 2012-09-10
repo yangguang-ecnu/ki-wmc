@@ -5,7 +5,9 @@ project(WMC)
 SET(CMAKE_BUILD_TYPE RelWithDebInfo)
 SET(CMAKE_CXX_FLAGS "")
 
-SET(ITK_DIR /home/soheil/lib/cmake/ITK-4.2/)
+IF(NOT DEFINED ITK_DIR)
+  SET(ITK_DIR /home/soheil/lib/cmake/ITK-4.2/)
+ENDIF(NOT DEFINED ITK_DIR)
 
 FIND_PACKAGE(ITK REQUIRED NO_DEFAULT_PATH)
 include(${ITK_USE_FILE})
