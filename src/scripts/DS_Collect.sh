@@ -16,7 +16,7 @@ Copyright (C) 2012 Soheil Damangir\n
 Report $EXNAME bugs to soheil.damangir@ki.se\n
 "
 
-COLLECTFV="../build/Debug/CollectFV"
+COLLECTFV="wmlCollectFV"
 FLAGS=
 BASEDIR="."
 VERBOSE=
