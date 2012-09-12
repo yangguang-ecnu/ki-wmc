@@ -8,7 +8,7 @@ Collects feature vectors for SEQs using options\n
 \n
 Options:\n
    -b           Base directory for sequences. Default: current directory\n
-   -e           Collector executive file\n
+   -e           Collector executive file. Default: wmcCollectFV\n
    -f           Flags to be passed to collector\n
    -v           Verbos flag on\n
 \n
@@ -16,7 +16,7 @@ Copyright (C) 2012 Soheil Damangir\n
 Report $EXNAME bugs to soheil.damangir@ki.se\n
 "
 
-COLLECTFV="wmlCollectFV"
+COLLECTFV="wmcCollectFV"
 FLAGS=
 BASEDIR="."
 VERBOSE=

@@ -62,7 +62,7 @@ public:
   const double &weight() const {
     return w;
   }
-  const double &length() const {
+  const unsigned int &length() const {
     return l;
   }
   const double& norm() const {

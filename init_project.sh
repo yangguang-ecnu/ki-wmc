@@ -27,30 +27,14 @@ verbose=
 while getopts "heip:v" OPTION
 do
   case $OPTION in
-    h)
-      usage
-      exit 1
-      ;;
-    e)
-      generator="Eclipse CDT4 - Unix Makefiles"
-      ;;
-    i)
-      installdir="$rootdir"
-      ;;
-    p)
-      installdir="$(readlink -f $OPTARG)"
-      ;;
-    v)
-      verbose=yes
-      ;;
-    ?)
-      usage
-      exit
-      ;;
+    h) usage;exit 1;;
+    e) generator="Eclipse CDT4 - Unix Makefiles";;
+    i) installdir="$rootdir";;
+    p) installdir="$(readlink -f $OPTARG)";;
+    v) verbose=yes;;
+    ?) usage;exit;;
   esac
 done
-
--DCMAKE_INSTALL_PREFIX=
 
 log()
 {
@@ -64,11 +48,11 @@ runcmd()
 
 if [ ! -d $srcdir ];
 then
-  echo "No 'src' directory." > 2
+  echo "No 'src' directory."
   exit 1
 elif [ ! -f $srcdir/CMakeLists.txt ];
 then
-  echo "$srcdir/CMakeLists.txt not found." > 2
+  echo "$srcdir/CMakeLists.txt not found."
   exit 1
 fi
 
@@ -102,7 +86,7 @@ fi
 
 if [ "$installdir" ];
 then
-  cmakearg="$cmakearg -DCMAKE_INSTALL_PREFIX=\"$installdir\""
+  cmakearg="$cmakearg -DCMAKE_INSTALL_PREFIX=$installdir"
 fi
 
 cmakearg="$cmakearg $srcdir"
