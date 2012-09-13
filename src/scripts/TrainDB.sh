@@ -15,12 +15,14 @@ OPTIONS:
    -r      Radius (default is 2)
    -n      Number of desired support-vectors (default is 1000)
    -m      Output trained model filename (default is none i.e. trainer default)
-   -c      Trainer command (default is wmlTrain)
+   -c      Trainer command (default is wmcTrain)
    -v      Verbose
+   -f      Fake run, just print the command to be runned
 EOF
 }
 
-command="wmlTrain"
+fake=
+command="wmcTrain"
 verbose=
 radius=2
 basedir=$(pwd)
@@ -28,7 +30,7 @@ seqpat="STACK*"
 gtpat="*WM*"
 numSV=1000
 modelFN=
-while getopts “hd:s:g:r:n:m:c:v” OPTION
+while getopts "hd:s:g:r:n:m:c:vf" OPTION
 do
   case $OPTION in
     h) usage;exit 1;;
@@ -40,6 +42,7 @@ do
     m) modelFN=$OPTARG;;
     c) command=$OPTARG;;
     v) verbose=yes;;
+    f) fake=yes;;
     ?) usage;exit;;
   esac
 done
@@ -50,8 +53,8 @@ then
   exit 1
 fi
 
-seqfiles=($(find $basedir -name $seqpat))
-gtfiles=($(find $basedir -name $gtpat))
+seqfiles=($(find $basedir -name $seqpat|sort))
+gtfiles=($(find $basedir -name $gtpat|sort))
 
 if [ "${#seqfiles[@]}" -eq "0" ];
 then
@@ -67,7 +70,7 @@ fi
 
 for ti in ${!seqfiles[@]};
 do
-  command="$command -i ${gtfiles[ti]} -m ${seqfiles[ti]}"
+  command="$command -i $(readlink -f ${seqfiles[ti]}) -m $(readlink -f ${gtfiles[ti]})"
 done
 
 command="$command -r $radius -s $numSV -t 0"
@@ -77,4 +80,9 @@ then
   command="$command -o $modelFN"
 fi
 
-$command
+if [ "$fake" ];
+then
+  echo "$command"
+else
+  $command
+fi

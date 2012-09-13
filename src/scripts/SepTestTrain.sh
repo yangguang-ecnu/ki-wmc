@@ -20,60 +20,41 @@ EOF
 }
 
 rootdir=$(pwd)
-copycommand="ln -s"
-verbose=
-ratio=0.2
 basedir=$(pwd)
-while getopts “hd:s:g:bb:cv” OPTION
+copycommand="ln -s"
+ratio=0.2
+verbose=
+while getopts “hd:s:g:b:r:cv” OPTION
 do
   case $OPTION in
-    h)
-      usage
-      exit 1
-      ;;
-    d)
-      rootdir=$OPTARG
-      ;;
-    b)
-      basedir=$OPTARG
-      ;;
-    s)
-      seqpat=$OPTARG
-      ;;
-    g)
-      gtpat=$OPTARG
-      ;;
-    r)
-      ratio=$OPTARG
-      ;;
-    c)
-      copycommand=cp
-      ;;
-    v)
-      verbose=yes
-      ;;
-    ?)
-      usage
-      exit
-      ;;
+    h) usage; exit 1;;
+    d) rootdir=$OPTARG;;
+    b) basedir=$OPTARG;;
+    s) seqpat=$OPTARG;;
+    g) gtpat=$OPTARG;;
+    r) ratio=$OPTARG;;
+    c) copycommand=cp;;
+    v) verbose=yes;;
+    ?) usage;exit;;
   esac
 done
 
 testdir=$basedir/test
 traindir=$basedir/train
 
-seqfiles=($(ls $rootdir/$seqpat))
-gtfiles=($(ls $rootdir/$gtpat))
+seqfiles=($(find $rootdir -name $seqpat|sort))
+gtfiles=($(find $rootdir -name $gtpat|sort))
+
 
 if [ ! -d "$rootdir" ];
 then
-  echo "Root directory $rootdir not found!" > 2
+  echo "Root directory $rootdir not found!" >&2
   exit 1
 fi
 
 if [ "${#gtfiles[@]}" -ne "${#seqfiles[@]}" ];
 then
-  echo "Number of sequences and ground truth files should be the same."
+  echo "Number of sequences and ground truth files should be the same." >&2
   exit 1
 fi
 

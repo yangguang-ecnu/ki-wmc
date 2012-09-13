@@ -15,26 +15,28 @@ ENDIF(NOT DEFINED ITK_DIR)
 FIND_PACKAGE(ITK REQUIRED NO_DEFAULT_PATH)
 include(${ITK_USE_FILE})
 
+SET(UTIL_SOURCE_FILES util.cpp)
+
 add_subdirectory(lasvm-source)
 include_directories (${WMC_SOURCE_DIR}/lasvm-source) 
 link_directories (${WMC_BINARY_DIR}/lasvm-source) 
 
-add_executable(Train Train-main.cxx)
+add_executable(Train Train-main.cxx ${UTIL_SOURCE_FILES})
 target_link_libraries(Train ${ITK_LIBRARIES} lasvm)
 
-add_executable(Test Test-main.cxx SVM.cpp) 
+add_executable(Test Test-main.cxx SVM.cpp ${UTIL_SOURCE_FILES}) 
 target_link_libraries(Test ${ITK_LIBRARIES})
 
-add_executable(Segmentation Segment-main.cxx SVM.cpp) 
+add_executable(Segmentation Segment-main.cxx SVM.cpp ${UTIL_SOURCE_FILES}) 
 target_link_libraries(Segmentation ${ITK_LIBRARIES})
 
-add_executable(CollectFV Collect-main.cxx) 
+add_executable(CollectFV Collect-main.cxx ${UTIL_SOURCE_FILES}) 
 target_link_libraries(CollectFV ${ITK_LIBRARIES})
 
-add_executable(ScaleImage Scale-main.cxx) 
+add_executable(ScaleImage Scale-main.cxx ${UTIL_SOURCE_FILES}) 
 target_link_libraries(ScaleImage ${ITK_LIBRARIES})
 
-add_executable(Distribution Distribution-main.cxx) 
+add_executable(Distribution Distribution-main.cxx ${UTIL_SOURCE_FILES}) 
 target_link_libraries(Distribution ${ITK_LIBRARIES})
 
 message("Installation root is ${CMAKE_INSTALL_PREFIX}")
