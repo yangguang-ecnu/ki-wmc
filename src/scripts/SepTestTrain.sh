@@ -10,8 +10,8 @@ Separates test and train sets from a delineated database.
 OPTIONS:
    -h      Show this message
    -d      Database directory (default is '.')
-   -s      Sequence pattern. Be sure to put * in quotes ''
-   -g      Ground truth pattern. Be sure to put * in quotes ''
+   -s      Sequence pattern.
+   -g      Ground truth pattern.
    -r      Ratio of samples to be considered in training (default is 0.2)
    -c      Copy files instead of making link
    -b      Base directory for train and test folders
@@ -38,12 +38,14 @@ do
     ?) usage;exit;;
   esac
 done
+basedir=$(readlink -f $basedir)
+rootdir=$(readlink -f $rootdir)
 
 testdir=$basedir/test
 traindir=$basedir/train
 
-seqfiles=($(find $rootdir -name $seqpat|sort))
-gtfiles=($(find $rootdir -name $gtpat|sort))
+seqfiles=($(ls $rootdir|grep $seqpat|sort))
+gtfiles=($(ls $rootdir|grep $gtpat|sort))
 
 
 if [ ! -d "$rootdir" ];
@@ -70,14 +72,14 @@ testIndex="${totalIndex[@]:$trainLen}"
 
 for ti in $trainIndex;
 do
-  $copycommand --target-directory=$traindir ${gtfiles[ti]}
-  $copycommand --target-directory=$traindir ${seqfiles[ti]}
+  $copycommand $rootdir/${gtfiles[ti]} $traindir/${gtfiles[ti]}
+  $copycommand $rootdir/${seqfiles[ti]} $traindir/${seqfiles[ti]}
 done
 
 for ti in $testIndex;
 do
-  $copycommand --target-directory=$testdir ${gtfiles[ti]}
-  $copycommand --target-directory=$testdir ${seqfiles[ti]}
+  $copycommand $rootdir/${gtfiles[ti]} $testdir/${gtfiles[ti]}
+  $copycommand $rootdir/${seqfiles[ti]} $testdir/${seqfiles[ti]} 
 done
 
 
